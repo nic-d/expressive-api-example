@@ -22,7 +22,7 @@ return function (Application $app, MiddlewareFactory $factory, ContainerInterfac
     // The error handler should be the first (most outer) middleware to catch
     // all Exceptions.
     $app->pipe(ErrorHandler::class);
-    $app->pipe('/api', Zend\ProblemDetails\ProblemDetailsMiddleware::class);
+    $app->pipe(Zend\ProblemDetails\ProblemDetailsMiddleware::class);
     $app->pipe(ServerUrlMiddleware::class);
 
     // Pipe more middleware here that you want to execute on every request:
@@ -73,6 +73,6 @@ return function (Application $app, MiddlewareFactory $factory, ContainerInterfac
     // At this point, if no Response is returned by any middleware, the
     // NotFoundHandler kicks in; alternately, you can provide other fallback
     // middleware to execute.
-    $app->pipe('/api', Zend\ProblemDetails\ProblemDetailsNotFoundHandler::class);
+    $app->pipe(Zend\ProblemDetails\ProblemDetailsNotFoundHandler::class);
     $app->pipe(NotFoundHandler::class);
 };
