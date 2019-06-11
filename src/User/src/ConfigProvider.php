@@ -31,6 +31,10 @@ class ConfigProvider
     {
         return [
             'factories' => [
+                Handler\FetchHandler::class => Handler\FetchHandlerFactory::class,
+                Handler\CreateHandler::class => Handler\CreateHandlerFactory::class,
+                Handler\DeleteHandler::class => Handler\DeleteHandlerFactory::class,
+                Handler\UpdateHandler::class => Handler\UpdateHandlerFactory::class,
             ],
         ];
     }
