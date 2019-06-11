@@ -9,6 +9,7 @@ use User\Hydrator\UserHydrator;
 use Doctrine\ORM\EntityManagerInterface;
 use User\Exception\UserNotFoundException;
 
+use function is_null;
 use function password_hash;
 
 /**
@@ -36,8 +37,23 @@ class UserService
         $this->userHydrator = $userHydrator;
     }
 
+    /**
+     * @param $id
+     * @return User
+     * @throws UserNotFoundException
+     */
     public function getOneById($id) : User
     {
+        /** @var User $user */
+        $user = $this->entityManager
+            ->getRepository(User::class)
+            ->find($id);
+
+        if (is_null($user)) {
+            throw UserNotFoundException::forId($id);
+        }
+
+        return $user;
     }
 
     /**

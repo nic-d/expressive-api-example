@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace User\Hydrator;
 
+use DateTime;
 use User\Entity\User;
 use Zend\Hydrator\Strategy;
 use Zend\Hydrator\ReflectionHydrator;
@@ -56,6 +57,24 @@ class UserHydrator extends ReflectionHydrator
      */
     private function addStrategies() : void
     {
-        // @todo declare some strategies for handling createdAt and updatedAt
+        $this->addStrategy('created_at', new Strategy\ClosureStrategy(
+            function ($value) {
+                if ($value instanceof DateTime) {
+                    return $value->format('Y-m-d H:i:s');
+                }
+
+                return $value;
+            }
+        ));
+
+        $this->addStrategy('updated_at', new Strategy\ClosureStrategy(
+            function ($value) {
+                if ($value instanceof DateTime) {
+                    return $value->format('Y-m-d H:i:s');
+                }
+
+                return $value;
+            }
+        ));
     }
 }
