@@ -13,8 +13,6 @@ $cacheConfig = [
 ];
 
 $aggregator = new ConfigAggregator([
-    \Util\ConfigProvider::class,
-    \User\ConfigProvider::class,
     Zend\Expressive\Hal\ConfigProvider::class,
     Zend\ProblemDetails\ConfigProvider::class,
     Zend\Hydrator\ConfigProvider::class,
@@ -33,6 +31,8 @@ $aggregator = new ConfigAggregator([
 
     // Default App module config
     App\ConfigProvider::class,
+    Util\ConfigProvider::class,
+    User\ConfigProvider::class,
 
     // Load application config in a pre-defined order in such a way that local settings
     // overwrite global settings. (Loaded as first to last):
