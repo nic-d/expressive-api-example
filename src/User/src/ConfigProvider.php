@@ -40,6 +40,7 @@ class ConfigProvider
             ],
 
             'factories' => [
+                Service\UserService::class => Service\UserServiceFactory::class,
                 Handler\FetchHandler::class => Handler\FetchHandlerFactory::class,
                 Handler\CreateHandler::class => Handler\CreateHandlerFactory::class,
                 Handler\DeleteHandler::class => Handler\DeleteHandlerFactory::class,
