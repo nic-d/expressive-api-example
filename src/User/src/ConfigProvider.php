@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace User;
 
+use Zend\Expressive\Hal\Metadata\MetadataMap;
 use Doctrine\ORM\Mapping\Driver\AnnotationDriver;
 use Zend\ServiceManager\Factory\InvokableFactory;
+use Zend\Expressive\Hal\Metadata\RouteBasedResourceMetadata;
 
 /**
  * Class ConfigProvider
@@ -19,9 +21,10 @@ class ConfigProvider
     public function __invoke() : array
     {
         return [
-            'dependencies' => $this->getDependencies(),
-            'routes'       => $this->getRoutes(),
-            'doctrine'     => $this->getDoctrine(),
+            'dependencies'     => $this->getDependencies(),
+            'routes'           => $this->getRoutes(),
+            'doctrine'         => $this->getDoctrine(),
+            MetadataMap::class => $this->getHalMetaDataMap(),
         ];
     }
 
@@ -33,6 +36,7 @@ class ConfigProvider
         return [
             'invokables' => [
                 Filter\UserFilter::class => InvokableFactory::class,
+                Hydrator\UserHydrator::class => InvokableFactory::class,
             ],
 
             'factories' => [
@@ -95,6 +99,21 @@ class ConfigProvider
                         'User\Entity' => 'user_driver',
                     ],
                 ],
+            ],
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    public function getHalMetaDataMap() : array
+    {
+        return [
+            [
+                '__class__'      => RouteBasedResourceMetadata::class,
+                'resource_class' => Entity\User::class,
+                'route'          => 'user.fetch',
+                'extractor'      => Hydrator\UserHydrator::class,
             ],
         ];
     }
