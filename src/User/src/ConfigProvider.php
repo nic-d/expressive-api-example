@@ -44,7 +44,32 @@ class ConfigProvider
      */
     public function getRoutes() : array
     {
-        return [];
+        return [
+            [
+                'name'            => 'user.create',
+                'path'            => '/user',
+                'middleware'      => Handler\CreateHandler::class,
+                'allowed_methods' => ['POST'],
+            ],
+            [
+                'name'            => 'user.fetch',
+                'path'            => '/user/{id}',
+                'middleware'      => Handler\FetchHandler::class,
+                'allowed_methods' => ['GET'],
+            ],
+            [
+                'name'            => 'user.update',
+                'path'            => '/user/{id}',
+                'middleware'      => Handler\UpdateHandler::class,
+                'allowed_methods' => ['PUT'],
+            ],
+            [
+                'name'            => 'user.delete',
+                'path'            => '/user/{id}',
+                'middleware'      => Handler\DeleteHandler::class,
+                'allowed_methods' => ['DELETE'],
+            ],
+        ];
     }
 
     /**
