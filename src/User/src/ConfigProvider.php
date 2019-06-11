@@ -71,7 +71,10 @@ class ConfigProvider
             [
                 'name'            => 'user.update',
                 'path'            => '/user/{id}',
-                'middleware'      => Handler\UpdateHandler::class,
+                'middleware'      => [
+                    Middleware\UserFetchMiddleware::class,
+                    Handler\UpdateHandler::class,
+                ],
                 'allowed_methods' => ['PUT'],
             ],
             [

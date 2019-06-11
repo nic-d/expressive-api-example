@@ -24,6 +24,7 @@ return function (Application $app, MiddlewareFactory $factory, ContainerInterfac
     $app->pipe(ErrorHandler::class);
     $app->pipe(Zend\ProblemDetails\ProblemDetailsMiddleware::class);
     $app->pipe(ServerUrlMiddleware::class);
+    $app->pipe(Zend\Expressive\Helper\BodyParams\BodyParamsMiddleware::class);
 
     // Pipe more middleware here that you want to execute on every request:
     // - bootstrapping
