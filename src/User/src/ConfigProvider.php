@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace User;
 
 use Doctrine\ORM\Mapping\Driver\AnnotationDriver;
+use Zend\ServiceManager\Factory\InvokableFactory;
 
 /**
  * Class ConfigProvider
@@ -30,6 +31,10 @@ class ConfigProvider
     public function getDependencies() : array
     {
         return [
+            'invokables' => [
+                Filter\UserFilter::class => InvokableFactory::class,
+            ],
+
             'factories' => [
                 Handler\FetchHandler::class => Handler\FetchHandlerFactory::class,
                 Handler\CreateHandler::class => Handler\CreateHandlerFactory::class,
