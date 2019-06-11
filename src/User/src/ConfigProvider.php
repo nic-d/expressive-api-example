@@ -35,7 +35,7 @@ class ConfigProvider
     {
         return [
             'invokables' => [
-                Filter\UserFilter::class => InvokableFactory::class,
+                Filter\UserFilter::class => Filter\UserFilter::class,
                 Hydrator\UserHydrator::class => Hydrator\UserHydrator::class,
             ],
 
