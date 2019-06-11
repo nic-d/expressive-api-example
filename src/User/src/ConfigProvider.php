@@ -6,7 +6,6 @@ namespace User;
 
 use Zend\Expressive\Hal\Metadata\MetadataMap;
 use Doctrine\ORM\Mapping\Driver\AnnotationDriver;
-use Zend\ServiceManager\Factory\InvokableFactory;
 use Zend\Expressive\Hal\Metadata\RouteBasedResourceMetadata;
 
 /**
