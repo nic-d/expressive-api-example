@@ -25,4 +25,9 @@ $ composer install
 $ cp .env.dist .env
 ```
 
-4) That's pretty much it.
+4) Now just run this command to set up the db schema:
+```bash
+$ php ./bin/console.php orm:schema-tool:update --force
+```
+
+5) That's pretty much it.
