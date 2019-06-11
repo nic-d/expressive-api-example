@@ -74,8 +74,26 @@ class UserService
         return $user;
     }
 
+    /**
+     * @param User $user
+     * @param array $data
+     * @return void
+     */
     public function update(User $user, array $data = []) : void
     {
+        /** @var string $currentPasswordHash */
+        $currentPasswordHash = $user->getPassword();
+
+        /** @var User $user */
+        $user = $this->userHydrator->hydrate($data, $user);
+
+        // If the password has changed, we need to hash
+        if ($currentPasswordHash !== $user->getPassword()) {
+            $user->setPassword(password_hash($user->getPassword(), PASSWORD_DEFAULT));
+        }
+
+        $this->entityManager->persist($user);
+        $this->entityManager->flush();
     }
 
     /**
