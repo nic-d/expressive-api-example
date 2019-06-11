@@ -2,22 +2,24 @@
 
 declare(strict_types=1);
 
-namespace User\Handler;
+namespace User\Middleware;
 
-use Exception;
 use User\Entity\User;
 use User\Service\UserService;
 use Psr\Http\Message\ResponseInterface;
-use Zend\Diactoros\Response\EmptyResponse;
+use Psr\Http\Server\MiddlewareInterface;
+use User\Exception\UserNotFoundException;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use Zend\ProblemDetails\ProblemDetailsResponseFactory;
 
+use function is_null;
+
 /**
- * Class DeleteHandler
- * @package User\Handler
+ * Class UserFetchMiddleware
+ * @package User\Middleware
  */
-class DeleteHandler implements RequestHandlerInterface
+class UserFetchMiddleware implements MiddlewareInterface
 {
     /** @var UserService $userService */
     private $userService;
@@ -26,7 +28,7 @@ class DeleteHandler implements RequestHandlerInterface
     private $problemDetailsResponseFactory;
 
     /**
-     * DeleteHandler constructor.
+     * UserFetchMiddleware constructor.
      * @param UserService $userService
      * @param ProblemDetailsResponseFactory $problemDetailsResponseFactory
      */
@@ -40,22 +42,32 @@ class DeleteHandler implements RequestHandlerInterface
 
     /**
      * @param ServerRequestInterface $request
+     * @param RequestHandlerInterface $handler
      * @return ResponseInterface
      */
-    public function handle(ServerRequestInterface $request) : ResponseInterface
+    public function process(ServerRequestInterface $request, RequestHandlerInterface $handler) : ResponseInterface
     {
-        /** @var User $user */
-        $user = $request->getAttribute(User::class);
+        /** @var string $id */
+        $id = $request->getAttribute('id', '');
+
+        if (is_null($id) || empty($id)) {
+            return $this->problemDetailsResponseFactory->createResponse(
+                $request,
+                400,
+                'Id attribute expected, got nothing'
+            );
+        }
 
         try {
-            $this->userService->delete($user);
-        } catch (Exception $exception) {
+            $user = $this->userService->getOneById($id);
+        } catch (UserNotFoundException $exception) {
             return $this->problemDetailsResponseFactory->createResponseFromThrowable(
                 $request,
                 $exception
             );
         }
 
-        return new EmptyResponse(200);
+        // Let's add this User entity to the request attributes, so we can use it in our handlers
+        return $handler->handle($request->withAttribute(User::class, $user));
     }
 }

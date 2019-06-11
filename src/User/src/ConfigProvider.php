@@ -45,6 +45,7 @@ class ConfigProvider
                 Handler\CreateHandler::class => Handler\CreateHandlerFactory::class,
                 Handler\DeleteHandler::class => Handler\DeleteHandlerFactory::class,
                 Handler\UpdateHandler::class => Handler\UpdateHandlerFactory::class,
+                Middleware\UserFetchMiddleware::class => Middleware\UserFetchMiddlewareFactory::class,
             ],
         ];
     }
@@ -76,7 +77,10 @@ class ConfigProvider
             [
                 'name'            => 'user.delete',
                 'path'            => '/user/{id}',
-                'middleware'      => Handler\DeleteHandler::class,
+                'middleware'      => [
+                    Middleware\UserFetchMiddleware::class,
+                    Handler\DeleteHandler::class,
+                ],
                 'allowed_methods' => ['DELETE'],
             ],
         ];

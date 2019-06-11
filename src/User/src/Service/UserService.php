@@ -78,7 +78,13 @@ class UserService
     {
     }
 
+    /**
+     * @param User $user
+     * @return void
+     */
     public function delete(User $user) : void
     {
+        $this->entityManager->remove($user);
+        $this->entityManager->flush();
     }
 }
